@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Participant {
+  id             Int       @id @default(autoincrement())
+  name           String @db.VarChar(50)
+  birthDate      DateTime?
+  age            Int?
+  role           String?  @db.VarChar(100) // função opcional
+  attendances    Attendance[]
+}
+
+model Event {
+  id             Int          @id @default(autoincrement())
+  name           String @db.VarChar(100)
+  date           DateTime
+  visitors       Int           @default(0)
+  totalPresent   Int           @default(0)
+  attendances    Attendance[]
+}
+
+model Attendance {
+  id             Int         @id @default(autoincrement())
+  eventId        Int
+  participantId  Int
+  present        Boolean
+  event          Event        @relation(fields: [eventId], references: [id])
+  participant    Participant  @relation(fields: [participantId], references: [id])
+}
