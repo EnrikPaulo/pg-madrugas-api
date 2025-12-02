@@ -1,3 +1,5 @@
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Controller, Get, Post, Body, Put, Patch, Delete, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from './dto/create-events.dto';
@@ -5,10 +7,12 @@ import { UpdateEventDto } from './dto/update-events.dto';
 import { EventCategory } from '@prisma/client';
 
 
+@UseGuards(JwtAuthGuard)
 @Controller('events')
 export class EventsController {
     constructor(private readonly eventsService: EventsService) { }
 
+ 
     @Post()
     async create(@Body() createEventDto: CreateEventDto) {
         return await this.eventsService.create(createEventDto);
@@ -79,6 +83,7 @@ export class EventsController {
 
 
 
+    
     @Put(':id')
     async update(
         @Param('id', ParseIntPipe) id: number,
@@ -86,6 +91,7 @@ export class EventsController {
         return await this.eventsService.update(id, updateEventDto);
     }
 
+    
     @Patch(':id')
     async partialUpdate(
         @Param('id', ParseIntPipe) id: number,
@@ -93,6 +99,7 @@ export class EventsController {
         return await this.eventsService.update(id, updateEventDto);
     }
 
+    
     @Delete(':id')
     async remove(@Param('id', ParseIntPipe) id: number) {
         return await this.eventsService.delete(id);

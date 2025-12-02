@@ -23,7 +23,7 @@ export class AuthService {
 
     // 3) Criar usuário no banco
     const user = await this.prisma.user.create({
-      data: { email, password: hashedPassword },
+      data: { email, password: hashedPassword, role: 'admin' },
     });
 
     return { message: 'Administrador criado com sucesso', userId: user.id };
@@ -44,7 +44,7 @@ export class AuthService {
     }
 
     // 3) Montar payload do token
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, role: user.role };
 
     // 4) Gerar token JWT
     const token = await this.jwtService.signAsync(payload);

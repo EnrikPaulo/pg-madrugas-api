@@ -1,7 +1,10 @@
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Controller, Get, Query } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { EventCategory } from '@prisma/client';
 
+@UseGuards(JwtAuthGuard)
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}

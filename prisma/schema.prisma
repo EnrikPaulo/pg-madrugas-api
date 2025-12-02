@@ -17,13 +17,17 @@ model Participant {
   attendances Attendance[]
 }
 
+enum Role {
+  admin
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
+  role      Role     @default(admin)
 }
-
 
 enum EventCategory {
   PG

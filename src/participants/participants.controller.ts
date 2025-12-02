@@ -1,9 +1,12 @@
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Controller, Get, Post, Body, Put, Patch, Delete, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ParticipantsService } from './participants.service';
 import { CreateParticipantDto } from './dto/create-participant.dto';
 import { UpdateParticipantDto } from './dto/update-participant.dto';
 import { AttendanceService } from 'src/attendance/attendance.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('participants')
 export class ParticipantsController {
   constructor(private readonly participantsService: ParticipantsService,
@@ -81,11 +84,13 @@ export class ParticipantsController {
   }
 
 
+  
   @Post()
   async create(@Body() createParticipantDto: CreateParticipantDto) {
     return await this.participantsService.create(createParticipantDto);
   }
 
+  
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -93,6 +98,7 @@ export class ParticipantsController {
     return await this.participantsService.update(id, updateParticipantDto);
   }
 
+ 
   @Patch(':id')
   async partialUpdate(
     @Param('id', ParseIntPipe) id: number,
@@ -100,6 +106,7 @@ export class ParticipantsController {
     return await this.participantsService.update(id, updateParticipantDto);
   }
 
+  
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return await this.participantsService.remove(id);
